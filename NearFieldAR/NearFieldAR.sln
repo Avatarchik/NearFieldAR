@@ -1,0 +1,29 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2008
+
+Project("{A4E64D6E-2224-CBA2-A427-AAA56D43F939}") = "NearFieldAR", "Assembly-CSharp.csproj", "{779F165E-2FC5-2B83-A627-F3C64A7CCBE2}"
+EndProject
+Project("{A4E64D6E-2224-CBA2-A427-AAA56D43F939}") = "NearFieldAR", "Assembly-CSharp-Editor.csproj", "{D97AACCC-AA4B-CB4B-A9F1-ED23FD808F0E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{779F165E-2FC5-2B83-A627-F3C64A7CCBE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{779F165E-2FC5-2B83-A627-F3C64A7CCBE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{779F165E-2FC5-2B83-A627-F3C64A7CCBE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{779F165E-2FC5-2B83-A627-F3C64A7CCBE2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D97AACCC-AA4B-CB4B-A9F1-ED23FD808F0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D97AACCC-AA4B-CB4B-A9F1-ED23FD808F0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D97AACCC-AA4B-CB4B-A9F1-ED23FD808F0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D97AACCC-AA4B-CB4B-A9F1-ED23FD808F0E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Assembly-CSharp.csproj
+	EndGlobalSection
+EndGlobal
