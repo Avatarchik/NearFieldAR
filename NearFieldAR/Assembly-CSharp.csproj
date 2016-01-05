@@ -77,7 +77,8 @@
      <Compile Include="Assets\AVProLiveCamera\Scripts\Wrapper\AVProLiveCameraPixelBuffer.cs" />
      <Compile Include="Assets\AVProLiveCamera\Scripts\Wrapper\AVProLiveCameraSettings.cs" />
      <Compile Include="Assets\Scripts\ActiveManager.cs" />
-     <Compile Include="Assets\Scripts\ObjectTracking.cs" />
+     <Compile Include="Assets\Scripts\ObjectTrackingLeft.cs" />
+     <Compile Include="Assets\Scripts\ObjectTrackingRight.cs" />
      <Compile Include="Assets\Scripts\StartCamera.cs" />
      <None Include="Assets\AVProLiveCamera\Demos\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_BloomAndFlares\BlendOneOne.shader" />
      <None Include="Assets\AVProLiveCamera\Demos\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\NoiseEffectShaderRGB.shader" />
