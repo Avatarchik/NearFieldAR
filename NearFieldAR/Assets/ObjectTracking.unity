@@ -323,7 +323,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ae6d87dd08367e4d8ca72960dc3721e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spName: COM6
+  spName: COM7
   deviceName: UI325xLE-C_4102832627
 --- !u!23 &1058563116
 MeshRenderer:
@@ -534,7 +534,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9f374cdb8abdf141a4db0799144446d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spName: COM7
+  spName: COM6
   deviceName: UI325xLE-C_4102832626
 --- !u!23 &2016428216
 MeshRenderer:
@@ -740,6 +740,10 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 469088, guid: 7087c4e6bbb370944af58c21ffc0a43c, type: 2}
       propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 182540, guid: 7087c4e6bbb370944af58c21ffc0a43c, type: 2}
+      propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:

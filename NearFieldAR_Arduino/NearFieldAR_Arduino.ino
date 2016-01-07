@@ -23,7 +23,7 @@ void loop()
     {
       // Rotate camera left
       case 'l':
-      servoPosition+=5;
+      servoPosition+=1;
       
       if (servoPosition > 180)
       {
@@ -34,7 +34,7 @@ void loop()
       
       // Rotate camera right
       case 'r':
-      servoPosition-=5;
+      servoPosition-=1;
       
       if (servoPosition < 0)
       {
