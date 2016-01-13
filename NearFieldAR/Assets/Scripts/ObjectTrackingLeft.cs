@@ -2,25 +2,19 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-//using OpenCvSharp;
-//using OpenCvSharp.CPlusPlus;
 using UnityEngine.UI;
 using System.IO;
 using System.IO.Ports;
-
-
 using Emgu.CV;
 using Emgu.CV.UI;
 using Emgu.CV.Structure;
-//using System.Drawing;
-//using System.Windows.Forms;
 using Emgu.Util;
 using Emgu.CV.Util;
 using System.Drawing;
 
 
 public class ObjectTrackingLeft : MonoBehaviour {
-	public string spName = "COM5";
+	public string spName = "COM7";
 	public static SerialPort sp;
 	public string deviceName = "UI325xLE-C_4102832626";
 	MeshRenderer mr;
@@ -34,9 +28,9 @@ public class ObjectTrackingLeft : MonoBehaviour {
     bool has_circle;
 
 
-    const int FRAME_WIDTH = 640;
-	const int FRAME_HEIGHT = 480;
-
+    const int FRAME_WIDTH = 800;
+	const int FRAME_HEIGHT = 600;
+	const int ROTATE_DEGREE = 5;
 	int servoPosition = 90;
 	int servoOrientation = 0;
 	// Use this for initialization
@@ -176,20 +170,21 @@ public class ObjectTrackingLeft : MonoBehaviour {
             servoOrientation = 0;
 
             // Check whether camera should turn to its left if the circle gets near the right end of the screen
-            if (centroid_y < tex.width / 2)
-            {
+         //   if (centroid_y < tex.width / 2)
+			if (centroid_y < 280)
+			{
                 sp.Write("l");
-                servoPosition += 1;
+				servoPosition += ROTATE_DEGREE;
 
                 if (servoPosition > 180)
                     servoPosition = 180;
             }
 
             // Check whether camera should turn to its right if the circle gets near the left end of the screen
-            //if (centroid_x < 200) {
-            else {
+            if (centroid_y > 200) {
+            //else {
                 sp.Write("r");
-                servoPosition -= 1;
+				servoPosition -= ROTATE_DEGREE;
 
                 if (servoPosition < 0)
                     servoPosition = 0;
@@ -198,7 +193,7 @@ public class ObjectTrackingLeft : MonoBehaviour {
         }
         CvInvoke.Imshow("left image", oriImage); //Show the image
 
-        CvInvoke.WaitKey(30);
+      //  CvInvoke.WaitKey(30);
     }
 
 	private int _lastFrameCount;
@@ -243,19 +238,6 @@ public class ObjectTrackingLeft : MonoBehaviour {
 		return rgb_image;
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 	public void OpenConnection()
 	{
 		if (sp != null) {
@@ -283,30 +265,4 @@ public class ObjectTrackingLeft : MonoBehaviour {
 	{
 		sp.Close();
 	}
-
-/*	void morphOps(ref CvMat thresh) {
-		// Maybe it is a DLL problem, is the correct DLL file in the Assets folder?
-
-		// This causes error:
-//		 		CvMat erodeElement = Cv2.GetStructuringElement (StructuringElementShape.Rect, new Size(3, 3));
-		// Not assigning to erodeElement does not cause error:
-//		 		Cv2.GetStructuringElement (StructuringElementShape.Rect, new Size(3, 3));
-		// These do not cause errors:
-//		var erodeElement = Cv2.GetStructuringElement (StructuringElementShape.Rect, new Size(3, 3));
-//		var dilateElement = Cv2.GetStructuringElement (StructuringElementShape.Rect, new Size (8, 8));
-
-		// Or you could try something like this:
-//		 CvInvoke.cvCreateStructuringElementEx(3,3,1,1,StructuringElementShape.Rect, null);
-
-		// I do not know how to convert Mat to InputArray
-		// This causes error
-//		InputArray thresharr = new InputArray (thresh); 
-
-		//Cv2.Erode (thresh, thresh, erodeElement, Cv.Point (1, 1), 1, 0, default(CvScalar));
-		//Cv2.Erode (thresh, thresh, erodeElement);
-		//Cv2.Erode (thresharr, thresharr, erodeElement, default(CvPoint), 1, 0, default(CvScalar?));
-		//Cv2.Dilate (thresh, thresh, dilateElement);
-		//Cv2.Dilate (thresh, thresh, dilateElement);
-	}
-*/
 }

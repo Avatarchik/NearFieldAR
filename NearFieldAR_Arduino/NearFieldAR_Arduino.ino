@@ -2,7 +2,7 @@
 
 Servo servo;
 int servoPosition = 90;
-
+int rotateDegree = 5;
 int incomingByte = 0;   // for incoming serial data
 
 void setup()
@@ -23,7 +23,7 @@ void loop()
     {
       // Rotate camera left
       case 'l':
-      servoPosition+=1;
+      servoPosition += rotateDegree;
       
       if (servoPosition > 180)
       {
@@ -34,7 +34,7 @@ void loop()
       
       // Rotate camera right
       case 'r':
-      servoPosition-=1;
+      servoPosition -= rotateDegree;
       
       if (servoPosition < 0)
       {

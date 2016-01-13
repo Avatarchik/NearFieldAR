@@ -110,9 +110,6 @@
      <None Include="Assets\AVProLiveCamera\Demos\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\SimpleClear.shader" />
      <None Include="Assets\AVProLiveCamera\Demos\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\EdgeDetectX.shader" />
      <None Include="Assets\AVProLiveCamera\Demos\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_Antialiasing\FXAAPreset2.shader" />
- <Reference Include="Assembly-UnityScript">
- <HintPath>D:/NearFieldAR/NearFieldAR/Library/ScriptAssemblies/Assembly-UnityScript.dll</HintPath>
- </Reference>
  <Reference Include="UnityEditor.Advertisements">
  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/UnityExtensions/Unity/Advertisements/Editor/UnityEditor.Advertisements.dll</HintPath>
  </Reference>
@@ -137,20 +134,59 @@
  <Reference Include="UnityEditor.TreeEditor">
  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/UnityExtensions/Unity/TreeEditor/Editor/UnityEditor.TreeEditor.dll</HintPath>
  </Reference>
- <Reference Include="OpenCvSharp.Blob">
- <HintPath>D:/NearFieldAR/NearFieldAR/Assets/Plugins/OpenCVSharp/OpenCvSharp.Blob.dll</HintPath>
+ <Reference Include="Emgu.CV.Contrib">
+ <HintPath>D:/NearFieldAR/NearFieldAR/Assets/Plugins/Emgu.CV.Contrib.dll</HintPath>
  </Reference>
- <Reference Include="OpenCvSharp.CPlusPlus">
- <HintPath>D:/NearFieldAR/NearFieldAR/Assets/Plugins/OpenCVSharp/OpenCvSharp.CPlusPlus.dll</HintPath>
+ <Reference Include="Emgu.CV.Cuda">
+ <HintPath>D:/NearFieldAR/NearFieldAR/Assets/Plugins/Emgu.CV.Cuda.dll</HintPath>
  </Reference>
- <Reference Include="OpenCvSharp">
- <HintPath>D:/NearFieldAR/NearFieldAR/Assets/Plugins/OpenCVSharp/OpenCvSharp.dll</HintPath>
+ <Reference Include="Emgu.CV.DebuggerVisualizers.VS2010">
+ <HintPath>D:/NearFieldAR/NearFieldAR/Assets/Plugins/Emgu.CV.DebuggerVisualizers.VS2010.dll</HintPath>
  </Reference>
- <Reference Include="OpenCvSharp.MachineLearning">
- <HintPath>D:/NearFieldAR/NearFieldAR/Assets/Plugins/OpenCVSharp/OpenCvSharp.MachineLearning.dll</HintPath>
+ <Reference Include="Emgu.CV.DebuggerVisualizers.VS2012">
+ <HintPath>D:/NearFieldAR/NearFieldAR/Assets/Plugins/Emgu.CV.DebuggerVisualizers.VS2012.dll</HintPath>
  </Reference>
- <Reference Include="OpenCvSharp.UserInterface">
- <HintPath>D:/NearFieldAR/NearFieldAR/Assets/Plugins/OpenCVSharp/OpenCvSharp.UserInterface.dll</HintPath>
+ <Reference Include="Emgu.CV.DebuggerVisualizers.VS2013">
+ <HintPath>D:/NearFieldAR/NearFieldAR/Assets/Plugins/Emgu.CV.DebuggerVisualizers.VS2013.dll</HintPath>
+ </Reference>
+ <Reference Include="Emgu.CV.DebuggerVisualizers.VS2015">
+ <HintPath>D:/NearFieldAR/NearFieldAR/Assets/Plugins/Emgu.CV.DebuggerVisualizers.VS2015.dll</HintPath>
+ </Reference>
+ <Reference Include="Emgu.CV">
+ <HintPath>D:/NearFieldAR/NearFieldAR/Assets/Plugins/Emgu.CV.dll</HintPath>
+ </Reference>
+ <Reference Include="Emgu.CV.ML">
+ <HintPath>D:/NearFieldAR/NearFieldAR/Assets/Plugins/Emgu.CV.ML.dll</HintPath>
+ </Reference>
+ <Reference Include="Emgu.CV.OCR">
+ <HintPath>D:/NearFieldAR/NearFieldAR/Assets/Plugins/Emgu.CV.OCR.dll</HintPath>
+ </Reference>
+ <Reference Include="Emgu.CV.Shape">
+ <HintPath>D:/NearFieldAR/NearFieldAR/Assets/Plugins/Emgu.CV.Shape.dll</HintPath>
+ </Reference>
+ <Reference Include="Emgu.CV.Stitching">
+ <HintPath>D:/NearFieldAR/NearFieldAR/Assets/Plugins/Emgu.CV.Stitching.dll</HintPath>
+ </Reference>
+ <Reference Include="Emgu.CV.Superres">
+ <HintPath>D:/NearFieldAR/NearFieldAR/Assets/Plugins/Emgu.CV.Superres.dll</HintPath>
+ </Reference>
+ <Reference Include="Emgu.CV.UI">
+ <HintPath>D:/NearFieldAR/NearFieldAR/Assets/Plugins/Emgu.CV.UI.dll</HintPath>
+ </Reference>
+ <Reference Include="Emgu.CV.UI.GL">
+ <HintPath>D:/NearFieldAR/NearFieldAR/Assets/Plugins/Emgu.CV.UI.GL.dll</HintPath>
+ </Reference>
+ <Reference Include="Emgu.CV.VideoStab">
+ <HintPath>D:/NearFieldAR/NearFieldAR/Assets/Plugins/Emgu.CV.VideoStab.dll</HintPath>
+ </Reference>
+ <Reference Include="Emgu.Util">
+ <HintPath>D:/NearFieldAR/NearFieldAR/Assets/Plugins/Emgu.Util.dll</HintPath>
+ </Reference>
+ <Reference Include="System.Drawing">
+ <HintPath>D:/NearFieldAR/NearFieldAR/Assets/Plugins/System.Drawing.dll</HintPath>
+ </Reference>
+ <Reference Include="ZedGraph">
+ <HintPath>D:/NearFieldAR/NearFieldAR/Assets/Plugins/ZedGraph.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.Graphs">
  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEditor.Graphs.dll</HintPath>
@@ -162,6 +198,8 @@
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp.csproj">
       <Project>{779F165E-2FC5-2B83-A627-F3C64A7CCBE2}</Project>      <Name>Assembly-CSharp</Name>    </ProjectReference>
+    <ProjectReference Include="Assembly-UnityScript.unityproj">
+      <Project>{B9367CCC-58A5-2AB7-153B-B0FA34BE8952}</Project>      <Name>Assembly-UnityScript</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

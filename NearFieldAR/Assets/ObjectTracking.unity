@@ -199,6 +199,14 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 127332, guid: 89998cf89869da748be9915a556a5e18, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11484272, guid: 89998cf89869da748be9915a556a5e18, type: 2}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 89998cf89869da748be9915a556a5e18, type: 2}
   m_IsPrefabParent: 0
@@ -293,6 +301,7 @@ GameObject:
   - 64: {fileID: 1058563117}
   - 23: {fileID: 1058563116}
   - 114: {fileID: 1058563115}
+  - 114: {fileID: 1058563119}
   m_Layer: 9
   m_Name: RightPlane
   m_TagString: Untagged
@@ -320,10 +329,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1058563113}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ae6d87dd08367e4d8ca72960dc3721e, type: 3}
+  m_Script: {fileID: 11500000, guid: a363e2134593cca46bb22f47a92bb399, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spName: COM7
+  spName: COM6
   deviceName: UI325xLE-C_4102832627
 --- !u!23 &1058563116
 MeshRenderer:
@@ -373,6 +382,18 @@ MeshFilter:
   m_PrefabInternal: {fileID: 2028138326}
   m_GameObject: {fileID: 1058563113}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1058563119
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1058563113}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbdb09301ffb8954491d52718223b610, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deviceName: UI325xLE-C_4102832627
 --- !u!1 &1168028985
 GameObject:
   m_ObjectHideFlags: 0
@@ -531,10 +552,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2016428213}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a9f374cdb8abdf141a4db0799144446d, type: 3}
+  m_Script: {fileID: 11500000, guid: 956af99898b2d584dad48da9b133296e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spName: COM6
+  spName: COM7
   deviceName: UI325xLE-C_4102832626
 --- !u!23 &2016428216
 MeshRenderer:
@@ -743,6 +764,10 @@ Prefab:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 182540, guid: 7087c4e6bbb370944af58c21ffc0a43c, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 137914, guid: 7087c4e6bbb370944af58c21ffc0a43c, type: 2}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
