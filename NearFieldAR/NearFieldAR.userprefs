@@ -1,9 +1,9 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\ObjectTrackingLeft.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\ObjectTrackingRight.cs">
     <Files>
-      <File FileName="Assets\Scripts\ObjectTrackingRight.cs" Line="33" Column="30" />
-      <File FileName="Assets\Scripts\ObjectTrackingLeft.cs" Line="32" Column="30" />
+      <File FileName="Assets\Scripts\ObjectTrackingRight.cs" Line="204" Column="40" />
+      <File FileName="Assets\Scripts\ObjectTrackingLeft.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\StartCamera.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>

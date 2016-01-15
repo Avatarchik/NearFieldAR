@@ -126,7 +126,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 125794, guid: 5e86add31fd095e4e803ab5b6b1923b8, type: 2}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 11449356, guid: 5e86add31fd095e4e803ab5b6b1923b8, type: 2}
@@ -301,7 +301,6 @@ GameObject:
   - 64: {fileID: 1058563117}
   - 23: {fileID: 1058563116}
   - 114: {fileID: 1058563115}
-  - 114: {fileID: 1058563119}
   m_Layer: 9
   m_Name: RightPlane
   m_TagString: Untagged
@@ -382,18 +381,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 2028138326}
   m_GameObject: {fileID: 1058563113}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &1058563119
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1058563113}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bbdb09301ffb8954491d52718223b610, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  deviceName: UI325xLE-C_4102832627
 --- !u!1 &1168028985
 GameObject:
   m_ObjectHideFlags: 0
@@ -440,7 +427,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!81 &1810472673
 AudioListener:
   m_ObjectHideFlags: 0

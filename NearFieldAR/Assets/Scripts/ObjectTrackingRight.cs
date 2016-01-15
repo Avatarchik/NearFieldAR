@@ -25,15 +25,17 @@ public class ObjectTrackingRight : MonoBehaviour {
 	RenderTexture was;
 	Texture2D tex;
 
-
+	double centroid_x = 0;
+	double centroid_y = 0;
+	double diameter = 0;
     bool has_circle;
 
 
 	const int FRAME_WIDTH = 800;
 	const int FRAME_HEIGHT = 600;
-	const int ROTATE_DEGREE = 5;
+	int ROTATE_DEGREE = 0;
 	int servoPosition = 90;
-	int servoOrientation = 0;
+	//int servoOrientation = 0;
 	// Use this for initialization
 	//CvMemStorage p_strStorage;
 
@@ -47,6 +49,7 @@ public class ObjectTrackingRight : MonoBehaviour {
 		tex = new Texture2D (FRAME_WIDTH, FRAME_HEIGHT);
         //p_strStorage = Cv.CreateMemStorage (0);
         has_circle = false;
+		StartCoroutine ("SendAngle");
     }
 
 	private void UpdateCameras()
@@ -61,7 +64,7 @@ public class ObjectTrackingRight : MonoBehaviour {
 		RenderTexture.active = was;
 		oriImage = Texture2dToMat (tex);
 
-        Image<Hsv, Byte> hsv_image = oriImage.Convert<Hsv, Byte>();
+       Image<Hsv, Byte> hsv_image = oriImage.Convert<Hsv, Byte>();
 
         Image<Gray, Byte> grayImg;
 
@@ -112,9 +115,9 @@ public class ObjectTrackingRight : MonoBehaviour {
             }
         }
 
-        double centroid_x = 0;
-        double centroid_y = 0;
-        double diameter = 0;
+        centroid_x = 0;
+        centroid_y = 0;
+       	diameter = 0;
         has_circle = false;
         if (prev_size > 50)
         {
@@ -126,12 +129,12 @@ public class ObjectTrackingRight : MonoBehaviour {
 
             diameter = Math.Sqrt(4 * area / Math.PI);
 
-            Console.WriteLine(centroid_x);
+         //   Console.WriteLine(centroid_x);
 
             CvInvoke.Circle(oriImage, new Point((int)centroid_x, (int)centroid_y), (int)diameter / 2, new MCvScalar(255, 0, 0), 5);
             has_circle = true;
         }
-
+		/*
         if (!has_circle) {
                 if (servoOrientation == 0) {
                     if (servoPosition >= 90)
@@ -155,45 +158,96 @@ public class ObjectTrackingRight : MonoBehaviour {
                         servoOrientation = 1;
                     }
                 }
-            }
+        }*/
             // Run this if the camera can see at least one circle
-            if (has_circle) {
+	/*	if (has_circle) {
                 
-                    Debug.Log (centroid_x);	// x position of center point of circle
-                    // y position of center point of circle
-                    Debug.Log (diameter);	// radius of circle
-                    servoOrientation = 0;
+        //   Debug.Log (centroid_x);	// x position of center point of circle
+        // y position of center point of circle
+        // Debug.Log (diameter);	// radius of circle
+            servoOrientation = 0;
+			ROTATE_DEGREE = (int)((centroid_y - (double)(FRAME_HEIGHT / 2)) / (double)(FRAME_HEIGHT / 2) * 40.0f);
+			//Debug.Log (centroid_y);
+			Debug.Log ((centroid_y - (double)(FRAME_HEIGHT / 2)) / 70.0f * 10.0f);
+			//ROTATE_DEGREE = 5;
+                // Check whether camera should turn to its left if the circle gets near the right end of the screen
+			if (centroid_y < 250) {
+				sp.Write (ROTATE_DEGREE + "");
+				servoPosition += ROTATE_DEGREE;
 
-                    // Check whether camera should turn to its left if the circle gets near the right end of the screen
-                   // if (centroid_y < tex.width / 2) {
-					if (centroid_y < 280) {
-                        sp.Write ("l");
-						servoPosition += ROTATE_DEGREE;
-
-                        if (servoPosition > 180)
-                            servoPosition = 180;
-                    }
-
-            // Check whether camera should turn to its right if the circle gets near the left end of the screen
-            		if (centroid_y > 200) {
-                    //else { 
-                        sp.Write ("r");
-						servoPosition -= ROTATE_DEGREE;
-
-                        if (servoPosition < 0)
-                            servoPosition = 0;
-                    }
-
-                
+                if (servoPosition > 180)
+                    servoPosition = 180;
             }
 
+           	 // Check whether camera should turn to its right if the circle gets near the left end of the screen
+			if (centroid_y > 350) {
+                   
+				sp.Write (ROTATE_DEGREE + "");
+				servoPosition += ROTATE_DEGREE;
 
-            CvInvoke.Imshow("right image", oriImage); //Show the image
+                if (servoPosition < 0)
+                    servoPosition = 0;
+            }
+		}
+*/
 
-  //      CvInvoke.WaitKey(30);
+        CvInvoke.Imshow("right image", oriImage); //Show the image
+
+  //    CvInvoke.WaitKey(30);
 
 
     }
+
+	IEnumerator SendAngle()
+	{
+		while (true) {
+			yield return new WaitForSeconds (0.2f);
+
+			if (has_circle) {
+				
+				// Debug.Log (centroid_x);	// x position of center point of circle
+				// y position of center point of circle
+				// Debug.Log (diameter);	// radius of circle
+//				servoOrientation = 0;
+				//ROTATE_DEGREE = (int)((centroid_y - (double)(FRAME_HEIGHT / 2)) / (double)(FRAME_HEIGHT / 2) * 40.0f);
+				ROTATE_DEGREE = (int) ((centroid_y - (double)(FRAME_HEIGHT / 2)) / 70.0f * 10.0f);
+				//Debug.Log (centroid_y);
+				ROTATE_DEGREE = ROTATE_DEGREE * -1;
+
+				Debug.Log (ROTATE_DEGREE);
+				// Check whether camera should turn to its left if the circle gets near the right end of the screen
+				sp.Write (ROTATE_DEGREE + "");
+				servoPosition += ROTATE_DEGREE;
+
+				if (servoPosition > 180)
+					servoPosition = 180;
+
+				if (servoPosition < 0)
+					servoPosition = 0;
+
+				/*
+				if (centroid_y < 270) {
+					sp.Write (ROTATE_DEGREE + "");
+					servoPosition += ROTATE_DEGREE;
+
+					if (servoPosition > 180)
+						servoPosition = 180;
+				}*/
+
+				// Check whether camera should turn to its right if the circle gets near the left end of the screen
+				/*if (centroid_y > 330) {
+
+					sp.Write (ROTATE_DEGREE + "");
+					servoPosition += ROTATE_DEGREE;
+
+					if (servoPosition < 0)
+						servoPosition = 0;
+				}*/
+			}
+		}
+	}
+
+
 
 	private int _lastFrameCount;
 	void OnRenderObject()

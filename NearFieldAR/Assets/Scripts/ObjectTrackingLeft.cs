@@ -124,7 +124,7 @@ public class ObjectTrackingLeft : MonoBehaviour {
 
             diameter = Math.Sqrt(4 * area / Math.PI);
 
-            Console.WriteLine(centroid_x);
+        //    Console.WriteLine(centroid_x);
 
             CvInvoke.Circle(oriImage, new Point((int)centroid_x, (int)centroid_y), (int)diameter / 2, new MCvScalar(255, 0, 0), 5);
             has_circle = true;
@@ -164,9 +164,9 @@ public class ObjectTrackingLeft : MonoBehaviour {
         if (has_circle)
         {
 
-            Debug.Log(centroid_x);  // x position of center point of circle
+       //     Debug.Log(centroid_x);  // x position of center point of circle
                                     // y position of center point of circle
-            Debug.Log(diameter);    // radius of circle
+         //   Debug.Log(diameter);    // radius of circle
             servoOrientation = 0;
 
             // Check whether camera should turn to its left if the circle gets near the right end of the screen
