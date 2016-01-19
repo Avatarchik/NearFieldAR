@@ -1,8 +1,10 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include "opencv2/opencv.hpp"
 #include <time.h> // to calculate time needed
 #include <limits.h> // to get INT_MAX, to protect against overflow
 #include <Windows.h>
+#include <thread>
 #define FRAME_WIDTH 800
 #define FRAME_HEIGHT 600
 using namespace cv;
@@ -11,10 +13,40 @@ int erosion_elem = 0;
 int erosion_size = 1;
 int dilation_elem = 0;
 int dilation_size = 1;
+int ROTATE_DEGREE = 0;
+int servoPosition = 90;
+char outputChars[] = "";
+DWORD btsIO;
+HANDLE hSerial;
+Scalar avgPixelIntensity;
+void SendAngle()
+{
+	while (1){
+		ROTATE_DEGREE = (int)((avgPixelIntensity.val[1] - (double)(FRAME_HEIGHT / 2)) / 70.0f * 10.0f);
+		//	ROTATE_DEGREE = ROTATE_DEGREE * -1;
+		sprintf(outputChars, "%d", ROTATE_DEGREE);
+	//	cout << outputChars << endl;
+		// Check whether camera should turn to its left if the circle gets near the right end of the screen
+		WriteFile(hSerial, outputChars, strlen(outputChars), &btsIO, NULL);
+		servoPosition += ROTATE_DEGREE;
+
+		if (servoPosition > 180)
+			servoPosition = 180;
+
+		if (servoPosition < 0)
+			servoPosition = 0;
+
+		Sleep(150);
+	}
+
+}
+
+
+
 int main(int, char**)
 {
 	// Setup serial port connection and needed variables.
-	HANDLE hSerial = CreateFile("COM6", GENERIC_READ | GENERIC_WRITE, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+	hSerial = CreateFile("COM6", GENERIC_READ | GENERIC_WRITE, 0, 0, OPEN_EXISTING, 0, 0);
 
 	if (hSerial != INVALID_HANDLE_VALUE)
 	{
@@ -41,8 +73,7 @@ int main(int, char**)
 	}
 
 
-	char outputChars[] = "";
-
+	
 	VideoCapture cap(0); // open the default camera
 	cap.set(CV_CAP_PROP_FRAME_WIDTH, FRAME_WIDTH);
 	cap.set(CV_CAP_PROP_FRAME_HEIGHT, FRAME_HEIGHT);
@@ -58,6 +89,8 @@ int main(int, char**)
 	double sec;
 	double fps;
 	int Number_Of_Elements;
+	thread mThread(SendAngle);
+
 	// fps counter end
 	for (;;)
 	{
@@ -79,10 +112,9 @@ int main(int, char**)
 		cvtColor(frame, imgHSV, CV_BGR2HSV);
 		inRange(imgHSV, Scalar(100, 150, 150), Scalar(200, 225, 225), imgResult);
 		GaussianBlur(imgResult, imgResult, Size(5, 5), 0.1, 0.1);
-	/*	Mat element = getStructuringElement(MORPH_RECT,
+		Mat element = getStructuringElement(MORPH_RECT,
 			Size(2 * erosion_size + 1, 2 * erosion_size + 1),
 			Point(erosion_size, erosion_size));
-
 		/// Apply the erosion operation
 		erode(imgResult, imgResult, element);
 		element = getStructuringElement(MORPH_RECT,
@@ -90,33 +122,19 @@ int main(int, char**)
 			Point(dilation_size, dilation_size));
 		/// Apply the dilation operation
 		dilate(imgResult, imgResult, element);
-		*/
 		Mat nonZeroCoordinates;
 		findNonZero(imgResult, nonZeroCoordinates);
 		//cout << "Non-Zero Locations = " << nonZeroCoordinates << endl << endl;
-		Scalar avgPixelIntensity = cv::mean(nonZeroCoordinates);
-		//prints out only .val[0] since image was grayscale
-		cout << "X = " << avgPixelIntensity.val[0] << " Y = " << avgPixelIntensity.val[1] << endl;
+	    avgPixelIntensity = cv::mean(nonZeroCoordinates);
 
-	/*	ROTATE_DEGREE = (int)((centroid_y - (double)(FRAME_HEIGHT / 2)) / 70.0f * 10.0f);
-		// Debug.Log (centroid_y);
-		ROTATE_DEGREE = ROTATE_DEGREE * -1;
+	//	cout << "X = " << avgPixelIntensity.val[0] << " Y = " << avgPixelIntensity.val[1] << endl;
 
-		//Debug.Log (ROTATE_DEGREE);
-		// Check whether camera should turn to its left if the circle gets near the right end of the screen
-		sp.Write(ROTATE_DEGREE + "");
-		servoPosition += ROTATE_DEGREE;
-
-		if (servoPosition > 180)
-			servoPosition = 180;
-
-		if (servoPosition < 0)
-			servoPosition = 0;
-			*/
-
-		imshow("frame", imgResult);
+		imshow("imgResult", imgResult);
+		imshow("frame", frame);
 		if (waitKey(30) >= 0) break;
 	}
+	mThread.join();
+	CloseHandle(hSerial);
 	// the camera will be deinitialized automatically in VideoCapture destructor
 	return 0;
 }
