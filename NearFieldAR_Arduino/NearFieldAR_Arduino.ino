@@ -4,7 +4,8 @@ Servo servo;
 int servoPosition = 90;
 int rotateDegree;
 int incomingByte = 0;   // for incoming serial data
-
+unsigned long time1;
+unsigned long time2;
 void setup()
 {
   Serial.begin(9600); // // opens serial port, sets data rate to 9600 bps
@@ -15,10 +16,15 @@ void setup()
 
 void loop()
 {
+  
   if (Serial.available() > 0) {
+    
     // read the incoming byte:
     //incomingByte = Serial.read();
-    rotateDegree = Serial.parseInt();
+ //   time1 = millis();  
+    rotateDegree = Serial.parseInt();   
+ //   time2 = millis();
+ //   Serial.println(time2 - time1);
     servoPosition += rotateDegree;
     if (servoPosition > 180)
     {
@@ -28,38 +34,7 @@ void loop()
     {
         servoPosition = 0;
     }
- 
-  /*  switch(incomingByte)
-    {
-      // Rotate camera left
-      case 'l':
-      servoPosition += rotateDegree;
-      
-      if (servoPosition > 180)
-      {
-        servoPosition = 180;
-      }
-
-      break;
-      
-      // Rotate camera right
-      case 'r':
-      servoPosition -= rotateDegree;
-      
-      if (servoPosition < 0)
-      {
-        servoPosition = 0;
-      }
-
-      break;
-      
-      // Center camera
-      case 'c':
-      servoPosition = 90;
-      
-      break;
-    }*/
-    
     servo.write(servoPosition);
   }
+ 
 }
