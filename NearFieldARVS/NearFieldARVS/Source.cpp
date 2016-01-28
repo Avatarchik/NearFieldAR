@@ -36,7 +36,7 @@ void SendAngle()
 		if (servoPosition < 0)
 			servoPosition = 0;
 
-		Sleep(150);
+		Sleep(100);
 	}
 
 }
@@ -46,7 +46,7 @@ void SendAngle()
 int main(int, char**)
 {
 	// Setup serial port connection and needed variables.
-	hSerial = CreateFile("COM6", GENERIC_READ | GENERIC_WRITE, 0, 0, OPEN_EXISTING, 0, 0);
+	hSerial = CreateFile("COM4", GENERIC_READ | GENERIC_WRITE, 0, 0, OPEN_EXISTING, 0, 0);
 
 	if (hSerial != INVALID_HANDLE_VALUE)
 	{
@@ -71,7 +71,7 @@ int main(int, char**)
 
 		printf("Error while setting up serial port! \n");
 	}
-
+	
 
 	
 	VideoCapture cap(0); // open the default camera
@@ -107,6 +107,7 @@ int main(int, char**)
 	//	if (counter > 30)
 		cout << fps << endl;
 		// overflow protection
+
 		if (counter == (INT_MAX - 1000))
 			counter = 0;
 		cvtColor(frame, imgHSV, CV_BGR2HSV);
