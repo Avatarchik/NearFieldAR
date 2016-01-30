@@ -6,7 +6,10 @@
 
 // defines pins numbers
 int stepperPosition = 90;
+int resolution = 8;
+int diff = 0;
 int rotateDegree;
+ int delayTime;
 const int stepPin = 5; 
 const int dirPin = 4; 
  
@@ -19,56 +22,41 @@ void setup() {
 }
 void loop() {
   if (Serial.available() > 0) {
-    rotateDegree = 0;
-    rotateDegree = Serial.parseInt();   
-    Rotate(rotateDegree);
-   
+    diff = 0;
+    diff = Serial.parseInt();  
+    if(diff > 70)
+      delayTime = 650;
+     else
+      delayTime = 1300;
+    rotateDegree = diff  * 150.0f / 150.0f * 72.0f / 600.0f; 
+    Rotate(diff);
+  //  Serial.println(rotateDegree);
   }
- // Serial.println(stepperPosition);
+
 }
-void Rotate(int degree) {
-  if(degree > 0 /*&& stepperPosition + degree <= 180*/) {
-    digitalWrite(dirPin,LOW); // Enables the motor to move in a particular direction
+void Rotate(float diff) {
+  int steps = (int)(diff * 150.0f * 200.0f * resolution * 72.0f / 150.0f / 360.0f / 600.0f);
+  if(rotateDegree > 0 && stepperPosition + rotateDegree <= 180) {
+      digitalWrite(dirPin,LOW); // Enables the motor to move in a particular direction
+      stepperPosition += rotateDegree;
+  }
+   else if(rotateDegree < 0 && stepperPosition + rotateDegree >= 0){
+      digitalWrite(dirPin, HIGH); // Enables the motor to move in a particular direction
+      steps = steps * -1;
+      stepperPosition += rotateDegree;
+   }
+   else
+    steps = 0;
   // Makes 200 pulses for making one full cycle rotation
-    int steps = (int)((float)degree / 360.0f * 200.0f);
-    int delayTime = 500;
- //  int delayTime = 80000 / steps;
- //   Serial.println(delayTime);
-    for(int i = 0; i < steps; i++) {
+   
+   for(int i = 0; i < steps; i++) {
       digitalWrite(stepPin,HIGH); 
       delayMicroseconds(delayTime); 
       digitalWrite(stepPin,LOW); 
       delayMicroseconds(delayTime); 
-    }
- /*   stepperPosition += degree;
-    if (stepperPosition > 180)
-    {
-        stepperPosition = 180;
-    }*/
-    //delay(20); 
-  }
-  else if(degree < 0 /*&& stepperPosition + degree >= 0*/){
-      digitalWrite(dirPin, HIGH); // Enables the motor to move in a particular direction
-  // Makes 200 pulses for making one full cycle rotation
-      int steps = (int)((float)-degree / 360.0f * 200.0f);
-      int delayTime = 500;
- //     int delayTime = 80000 / steps;
-//      Serial.println(delayTime);
-      for(int i = 0; i < steps; i++) {
-        digitalWrite(stepPin,HIGH); 
-        delayMicroseconds(delayTime);
-        digitalWrite(stepPin,LOW); 
-        delayMicroseconds(delayTime);
-      }
-   /*   stepperPosition += degree;
-      if (stepperPosition < 0)
-      {
-        stepperPosition = 0;
-      }*/
-     // delay(20); 
-  }
-  
+   }
 }
+
 
 
 

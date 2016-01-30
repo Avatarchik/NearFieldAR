@@ -13,30 +13,35 @@ int erosion_elem = 0;
 int erosion_size = 1;
 int dilation_elem = 0;
 int dilation_size = 1;
-int ROTATE_DEGREE = 0;
-int servoPosition = 90;
+int diff = 0;
+//int servoPosition = 90;
 char outputChars[] = "";
 DWORD btsIO;
 HANDLE hSerial;
 Scalar avgPixelIntensity;
+Mat nonZeroCoordinates;
 void SendAngle()
 {
 	while (1){
-		ROTATE_DEGREE = (int)((avgPixelIntensity.val[1] - (double)(FRAME_HEIGHT / 2)) / 70.0f * 10.0f);
+		//ROTATE_DEGREE = (int)((avgPixelIntensity.val[1] - (double)(FRAME_HEIGHT / 2)) / 70.0f * 10.0f);
+		diff = 0;
+		if (nonZeroCoordinates.rows > 10000)
+			diff = (int)(avgPixelIntensity.val[1] - (double)(FRAME_HEIGHT / 2));
 		//	ROTATE_DEGREE = ROTATE_DEGREE * -1;
-		sprintf(outputChars, "%d", ROTATE_DEGREE);
+		cout << diff << endl;
+		sprintf(outputChars, "%d", diff);
 	//	cout << outputChars << endl;
 		// Check whether camera should turn to its left if the circle gets near the right end of the screen
 		WriteFile(hSerial, outputChars, strlen(outputChars), &btsIO, NULL);
-		servoPosition += ROTATE_DEGREE;
+		/*servoPosition += ROTATE_DEGREE;
 
 		if (servoPosition > 180)
 			servoPosition = 180;
 
 		if (servoPosition < 0)
 			servoPosition = 0;
-
-		Sleep(150);
+			*/
+		Sleep(120);
 	}
 
 }
@@ -105,7 +110,7 @@ int main(int, char**)
 		sec = difftime(end, start);
 		fps = counter / sec;
 		if (counter > 30)
-			cout << fps << endl;
+			//cout << fps << endl;
 		// overflow protection
 
 		if (counter == (INT_MAX - 1000))
@@ -123,7 +128,7 @@ int main(int, char**)
 			Point(dilation_size, dilation_size));
 		/// Apply the dilation operation
 		dilate(imgResult, imgResult, element);
-		Mat nonZeroCoordinates;
+		
 		findNonZero(imgResult, nonZeroCoordinates);
 		//cout << "Non-Zero Locations = " << nonZeroCoordinates << endl << endl;
 	    avgPixelIntensity = cv::mean(nonZeroCoordinates);
