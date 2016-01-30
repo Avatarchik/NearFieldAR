@@ -36,7 +36,7 @@ void SendAngle()
 		if (servoPosition < 0)
 			servoPosition = 0;
 
-		Sleep(100);
+		Sleep(150);
 	}
 
 }
@@ -104,8 +104,8 @@ int main(int, char**)
 		counter++;
 		sec = difftime(end, start);
 		fps = counter / sec;
-	//	if (counter > 30)
-		cout << fps << endl;
+		if (counter > 30)
+			cout << fps << endl;
 		// overflow protection
 
 		if (counter == (INT_MAX - 1000))
