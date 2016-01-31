@@ -24,10 +24,10 @@ void loop() {
   if (Serial.available() > 0) {
     diff = 0;
     diff = Serial.parseInt();  
-    if(diff > 70)
+/*    if(diff > 70)
       delayTime = 650;
-     else
-      delayTime = 1300;
+    else*/
+   // delayTime = 1300;
     rotateDegree = diff  * 150.0f / 150.0f * 72.0f / 600.0f; 
     Rotate(diff);
   //  Serial.println(rotateDegree);
@@ -36,6 +36,7 @@ void loop() {
 }
 void Rotate(float diff) {
   int steps = (int)(diff * 150.0f * 200.0f * resolution * 72.0f / 150.0f / 360.0f / 600.0f);
+  
   if(rotateDegree > 0 && stepperPosition + rotateDegree <= 180) {
       digitalWrite(dirPin,LOW); // Enables the motor to move in a particular direction
       stepperPosition += rotateDegree;
@@ -48,7 +49,7 @@ void Rotate(float diff) {
    else
     steps = 0;
   // Makes 200 pulses for making one full cycle rotation
-   
+   delayTime = 50000 / abs(steps);
    for(int i = 0; i < steps; i++) {
       digitalWrite(stepPin,HIGH); 
       delayMicroseconds(delayTime); 
