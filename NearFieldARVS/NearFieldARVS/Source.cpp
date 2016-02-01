@@ -29,6 +29,7 @@ void SendAngle()
 			diff = (int)(avgPixelIntensity.val[1] - (double)(FRAME_HEIGHT / 2));
 		//	ROTATE_DEGREE = ROTATE_DEGREE * -1;
 		cout << diff << endl;
+		
 		sprintf(outputChars, "%d", diff);
 	//	cout << outputChars << endl;
 		// Check whether camera should turn to its left if the circle gets near the right end of the screen
@@ -41,7 +42,7 @@ void SendAngle()
 		if (servoPosition < 0)
 			servoPosition = 0;
 			*/
-		Sleep(120);
+		Sleep(110);
 	}
 
 }

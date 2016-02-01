@@ -126,7 +126,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 125794, guid: 5e86add31fd095e4e803ab5b6b1923b8, type: 2}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 11449356, guid: 5e86add31fd095e4e803ab5b6b1923b8, type: 2}
@@ -331,7 +331,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a363e2134593cca46bb22f47a92bb399, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spName: COM6
+  spName: COM4
   deviceName: UI325xLE-C_4102832627
 --- !u!23 &1058563116
 MeshRenderer:
@@ -427,7 +427,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!81 &1810472673
 AudioListener:
   m_ObjectHideFlags: 0

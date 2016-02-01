@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Emgu.CV.CvEnum;
+using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,17 +12,16 @@ using Emgu.CV.Structure;
 using Emgu.Util;
 using Emgu.CV.Util;
 using System.Drawing;
+using System.Runtime.InteropServices;
 
 
 public class ObjectTrackingRight : MonoBehaviour {
-	public string spName = "COM6";
+	public string spName = "COM4";
 	public static SerialPort sp;
 	public string deviceName = "UI325xLE-C_4102832627";
 	MeshRenderer mr;
 	bool useMorphOps = true;
-	Image<Rgb, Byte> oriImage;
-	//private CvMat Gray;
-	//private CvMat threshold;
+	Image<Bgr, Byte> oriImage;
 	RenderTexture was;
 	Texture2D tex;
 
@@ -36,21 +36,17 @@ public class ObjectTrackingRight : MonoBehaviour {
 	const int FRAME_HEIGHT = 600;
 	int ROTATE_DEGREE = 0;
 	int servoPosition = 90;
-	//int servoOrientation = 0;
+	Mat nonZeroCoordinates;
 	// Use this for initialization
-	//CvMemStorage p_strStorage;
 
 	void Start () {
 		sp = new SerialPort(spName, 9600, Parity.None, 8, StopBits.One);
 		OpenConnection ();
 		AVProLiveCameraManager.Instance.GetDevice(deviceName).Start(-1);    
 		mr = GetComponent<MeshRenderer> ();
-		//oriImage = new CvMat (FRAME_WIDTH, FRAME_HEIGHT, MatrixType.U8C3);
-		//Gray = new CvMat (FRAME_HEIGHT, FRAME_WIDTH, MatrixType.U8C1);
 		tex = new Texture2D (FRAME_WIDTH, FRAME_HEIGHT);
-        //p_strStorage = Cv.CreateMemStorage (0);
         has_circle = false;
-		StartCoroutine ("SendAngle");
+	//	StartCoroutine ("SendAngle");
     }
 
 	private void UpdateCameras()
@@ -63,18 +59,9 @@ public class ObjectTrackingRight : MonoBehaviour {
 		tex.ReadPixels (new UnityEngine.Rect(0, 0, FRAME_WIDTH, FRAME_HEIGHT), 0, 0);
 		tex.Apply ();
 		RenderTexture.active = was;
-		oriImage = Texture2dToMat (tex);
-
-        Image<Hsv, Byte> hsv_image = oriImage.Convert<Hsv, Byte>();
-
-        Image<Gray, Byte> grayImg;
-
-
-        //grayImg = img[0].InRange(new Gray(80), new Gray(100));
-        Image<Gray, Byte>[] channels = hsv_image.Split();
-        Image<Gray, Byte> imghue = channels[0];            //hsv, so channels[0] is hue.
-        Image<Gray, Byte> imgval = channels[2];            //hsv, so channels[2] is value.
-
+	/*	oriImage = Texture2dToMat (tex);*/
+		oriImage = Texture2dToImage<Bgr, byte> (tex, true);
+     /*   Image<Hsv, Byte> hsv_image = oriImage.Convert<Hsv, Byte>();
 
         // Change the HSV value here
         Hsv hsvmin = new Hsv(100, 150, 150);
@@ -86,14 +73,20 @@ public class ObjectTrackingRight : MonoBehaviour {
 
         red_object = red_object.Erode(1);
         red_object = red_object.Dilate(1);
+*/
+/*		CvInvoke.FindNonZero (red_object, nonZeroCoordinates);
 
-        
-       VectorOfVectorOfPoint contoursDetected = new VectorOfVectorOfPoint();
-       CvInvoke.FindContours(red_object, contoursDetected, null, Emgu.CV.CvEnum.RetrType.List, Emgu.CV.CvEnum.ChainApproxMethod.ChainApproxSimple, default(Point));
-       List<VectorOfPoint> contoursArray = new List<VectorOfPoint>();
-       int count = contoursDetected.Size;
+		Debug.Log (nonZeroCoordinates);*/
 
-        VectorOfPoint biggest_contour = null;
+
+		/*
+
+       	VectorOfVectorOfPoint contoursDetected = new VectorOfVectorOfPoint();
+       	CvInvoke.FindContours(red_object, contoursDetected, null, Emgu.CV.CvEnum.RetrType.List, Emgu.CV.CvEnum.ChainApproxMethod.ChainApproxSimple, default(Point));
+       	List<VectorOfPoint> contoursArray = new List<VectorOfPoint>();
+       	int count = contoursDetected.Size;
+
+       	VectorOfPoint biggest_contour = null;
         int prev_size = 0;
         for (int i = 0; i < count; i++)
         {
@@ -126,7 +119,7 @@ public class ObjectTrackingRight : MonoBehaviour {
 
             CvInvoke.Circle(oriImage, new Point((int)centroid_x, (int)centroid_y), (int)diameter / 2, new MCvScalar(255, 0, 0), 5);
             has_circle = true;
-        }
+        }*/
       	CvInvoke.Imshow("right image", oriImage); //Show the image
   //    CvInvoke.WaitKey(30);
     }
@@ -150,7 +143,7 @@ public class ObjectTrackingRight : MonoBehaviour {
 
 				//Debug.Log (ROTATE_DEGREE);
 				// Check whether camera should turn to its left if the circle gets near the right end of the screen
-				sp.Write (ROTATE_DEGREE + "");
+				//sp.Write (ROTATE_DEGREE + "");
 				servoPosition += ROTATE_DEGREE;
 
 				if (servoPosition > 180)
@@ -173,10 +166,9 @@ public class ObjectTrackingRight : MonoBehaviour {
 		{
 			_lastFrameCount = Time.frameCount;
 			UpdateCameras();
-			//Debug.Log (time2);
 		}
 	}
-
+	/*
     private Image<Rgb, Byte> Texture2dToMat(Texture2D tex)
     {
         Image<Rgb, Byte> rgb_image = new Image<Rgb, Byte>(tex.width, tex.height);
@@ -200,8 +192,40 @@ public class ObjectTrackingRight : MonoBehaviour {
             }
         }
         return rgb_image;
-    }
+    }*/
 
+	public static Image<TColor, TDepth> Texture2dToImage<TColor, TDepth>(Texture2D texture, bool correctForVerticleFlip = true)
+         where TColor : struct, IColor
+         where TDepth : new()
+    {
+    	int width = texture.width;
+        int height = texture.height;
+
+
+        Image<TColor, TDepth> result = new Image<TColor, TDepth>(width, height);
+        try
+        {
+        	Color32[] colors = texture.GetPixels32();
+            GCHandle handle = GCHandle.Alloc(colors, GCHandleType.Pinned);
+            using (Image<Rgba, Byte> rgba = new Image<Rgba, byte>(width, height, width * 4, handle.AddrOfPinnedObject()))
+            {
+               result.ConvertFrom(rgba);
+            }
+            handle.Free();
+        }
+        catch (Exception)
+        {
+        	byte[] jpgBytes = texture.EncodeToJPG();
+            using (Mat tmp = new Mat())
+            {
+               CvInvoke.Imdecode(jpgBytes, LoadImageType.AnyColor, tmp);
+               result.ConvertFrom(tmp);
+            }
+        }
+        if (correctForVerticleFlip)
+            CvInvoke.Flip(result, result, Emgu.CV.CvEnum.FlipType.Vertical);
+        return result;
+     }
 
     public void OpenConnection()
 	{
