@@ -17,7 +17,7 @@ using System.Runtime.InteropServices;
 
 public class ObjectTrackingRight : MonoBehaviour {
 	public string spName = "COM4";
-	public static SerialPort sp;
+	private static SerialPort sp;
 	public string deviceName = "UI325xLE-C_4102832627";
 	AVProLiveCameraDevice device;
 	MeshRenderer mr;
@@ -75,7 +75,7 @@ public class ObjectTrackingRight : MonoBehaviour {
 		CvInvoke.FindNonZero (red_object, nonZeroCoordinates);
 		avgPixelIntensity = CvInvoke.Mean(nonZeroCoordinates);
 	//	Debug.Log (avgPixelIntensity.V1);
-		CvInvoke.Imshow("right image", red_object); //Show the image
+		//CvInvoke.Imshow("right image", red_object); //Show the image
   //    CvInvoke.WaitKey(30);
     }
 
@@ -86,7 +86,7 @@ public class ObjectTrackingRight : MonoBehaviour {
 			diff = 0;
 			if (nonZeroCoordinates.Rows > 10000)
 				diff = (int)(avgPixelIntensity.V1 - (double)(FRAME_HEIGHT / 2));
-			Debug.Log (diff);
+//			Debug.Log (diff);
 			sp.Write (diff + "");
 		}
 	}

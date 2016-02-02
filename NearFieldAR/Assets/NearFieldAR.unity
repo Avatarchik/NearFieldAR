@@ -348,7 +348,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbdb09301ffb8954491d52718223b610, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deviceName: UI325xLE-C_4102826020
+  deviceName: UI325xLE-C_4102832626
 --- !u!1 &633493549
 GameObject:
   m_ObjectHideFlags: 0
