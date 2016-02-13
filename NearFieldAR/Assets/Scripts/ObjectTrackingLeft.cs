@@ -27,12 +27,19 @@ public class ObjectTrackingLeft : MonoBehaviour {
 	float time1;
 	float time2;
 	// Use this for initialization
-	const int FRAME_WIDTH = 800;
-	const int FRAME_HEIGHT = 600;
+	const int FRAME_WIDTH = 1024;
+	const int FRAME_HEIGHT = 768;
 	int servoPosition = 90;
 	Mat nonZeroCoordinates;
 	MCvScalar avgPixelIntensity;
 	int diff = 0;
+
+	 int H_MIN = 0;
+	 int H_MAX = 180;
+	 int S_MIN = 178;
+	 int S_MAX = 255;
+	 int V_MIN = 255;
+	 int V_MAX = 255;
 	// Use this for initialization
 	void Start () {
 		sp = new SerialPort(spName, 9600, Parity.None, 8, StopBits.One);
@@ -61,8 +68,8 @@ public class ObjectTrackingLeft : MonoBehaviour {
 		Image<Hsv, Byte> hsv_image = oriImage.Convert<Hsv, Byte>();
 
 		// Change the HSV value here
-		Hsv hsvmin = new Hsv(100, 150, 150);
-		Hsv hsvmax = new Hsv(200, 255, 255);
+		Hsv hsvmin = new Hsv(H_MIN, S_MIN, V_MIN);
+		Hsv hsvmax = new Hsv(H_MAX, S_MAX, V_MAX);
 
 		hsv_image = hsv_image.SmoothGaussian(5, 5, 0.1, 0.1);
 
@@ -74,15 +81,15 @@ public class ObjectTrackingLeft : MonoBehaviour {
 		CvInvoke.FindNonZero (red_object, nonZeroCoordinates);
 		avgPixelIntensity = CvInvoke.Mean(nonZeroCoordinates);
 		//	Debug.Log (avgPixelIntensity.V1);
-		CvInvoke.Imshow("Left image", red_object); //Show the image
+	//	CvInvoke.Imshow("Left image", red_object); //Show the image
 		//    CvInvoke.WaitKey(30);
 	}
 	IEnumerator SendDiff()
 	{
 		while (true) {
-			yield return new WaitForSeconds (0.11f);
+			yield return new WaitForSeconds (0.15f);
 			diff = 0;
-			if (nonZeroCoordinates.Rows > 10000)
+			if (nonZeroCoordinates.Rows > 1000)
 				diff = (int)(avgPixelIntensity.V1 - (double)(FRAME_HEIGHT / 2));
 //			Debug.Log (diff);
 			sp.Write (diff + "");
