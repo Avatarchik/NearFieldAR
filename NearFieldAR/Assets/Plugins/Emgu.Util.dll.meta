@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: a966b59fc249faf4dbf218312043b934
-timeCreated: 1452582923
+guid: a67e82f5ae9d0374ab8ed85305755915
+timeCreated: 1455383665
 licenseType: Free
 PluginImporter:
   serializedVersion: 1
@@ -15,30 +15,6 @@ PluginImporter:
       enabled: 0
       settings:
         DefaultValueInitialized: true
-    Linux:
-      enabled: 0
-      settings: {}
-    Linux64:
-      enabled: 0
-      settings: {}
-    LinuxUniversal:
-      enabled: 0
-      settings: {}
-    OSXIntel:
-      enabled: 0
-      settings: {}
-    OSXIntel64:
-      enabled: 0
-      settings: {}
-    OSXUniversal:
-      enabled: 0
-      settings: {}
-    Win:
-      enabled: 0
-      settings: {}
-    Win64:
-      enabled: 0
-      settings: {}
     WindowsStoreApps:
       enabled: 0
       settings:

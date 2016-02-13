@@ -22,6 +22,7 @@ public class ObjectTrackingLeft : MonoBehaviour {
 	AVProLiveCameraDevice device;
 	MeshRenderer mr;
 	Image<Bgr, Byte> oriImage;
+	Image<Bgr, Byte> resImage;
 	RenderTexture was;
 	Texture2D tex;
 	float time1;
@@ -31,24 +32,35 @@ public class ObjectTrackingLeft : MonoBehaviour {
 	const int FRAME_HEIGHT = 768;
 	int servoPosition = 90;
 	Mat nonZeroCoordinates;
+	Mat Camera_Matrix;
+	Mat Distortion_Coefficients;
 	MCvScalar avgPixelIntensity;
 	int diff = 0;
 
-	 int H_MIN = 0;
-	 int H_MAX = 180;
-	 int S_MIN = 178;
-	 int S_MAX = 255;
-	 int V_MIN = 255;
-	 int V_MAX = 255;
+	int H_MIN = 22;
+	int H_MAX = 65;
+	int S_MIN = 156;
+	int S_MAX = 255;
+	int V_MIN = 92;
+	int V_MAX = 255;
 	// Use this for initialization
 	void Start () {
 		sp = new SerialPort(spName, 9600, Parity.None, 8, StopBits.One);
 		OpenConnection ();
 		AVProLiveCameraManager.Instance.GetDevice(deviceName).Start(-1);    
-
+		resImage = new Image<Bgr, Byte> (FRAME_WIDTH, FRAME_HEIGHT);
 		mr = GetComponent<MeshRenderer> ();
 		tex = new Texture2D (FRAME_WIDTH, FRAME_HEIGHT);
 		nonZeroCoordinates = new Mat();
+		double[] camera_Matrix = new double[9]{5.4432826135870630e+002, 0.0, 5.1150000000000000e+002, 0.0,
+			5.4432826135870630e+002, 3.8350000000000000e+002, 0.0, 0.0, 1.0};
+		Camera_Matrix = new Mat(3, 3, DepthType.Cv64F, 1);
+		Camera_Matrix.SetTo(camera_Matrix);
+
+		double[] distortion_Coefficients = new double[5]{-4.0582850454021074e-001, 2.0214084200881555e-001, 0.0, 0.0,
+			-5.3089969982021680e-002};
+		Distortion_Coefficients = new Mat(5, 1, DepthType.Cv64F, 1);
+		Distortion_Coefficients.SetTo(distortion_Coefficients);
 		StartCoroutine ("SendDiff");
 	}
 
@@ -65,7 +77,10 @@ public class ObjectTrackingLeft : MonoBehaviour {
 		RenderTexture.active = was;
 		/*	oriImage = Texture2dToMat (tex);*/
 		oriImage = Texture2dToImage<Bgr, byte> (tex, true);
-		Image<Hsv, Byte> hsv_image = oriImage.Convert<Hsv, Byte>();
+		CvInvoke.Undistort (oriImage, resImage, Camera_Matrix, Distortion_Coefficients);
+		mr.material.mainTexture = (Texture)ImageToTexture2D(resImage, true);    
+
+		Image<Hsv, Byte> hsv_image = resImage.Convert<Hsv, Byte>();
 
 		// Change the HSV value here
 		Hsv hsvmin = new Hsv(H_MIN, S_MIN, V_MIN);
@@ -81,7 +96,7 @@ public class ObjectTrackingLeft : MonoBehaviour {
 		CvInvoke.FindNonZero (red_object, nonZeroCoordinates);
 		avgPixelIntensity = CvInvoke.Mean(nonZeroCoordinates);
 		//	Debug.Log (avgPixelIntensity.V1);
-	//	CvInvoke.Imshow("Left image", red_object); //Show the image
+		//CvInvoke.Imshow("Left image", resImage); //Show the image
 		//    CvInvoke.WaitKey(30);
 	}
 	IEnumerator SendDiff()
@@ -138,6 +153,51 @@ public class ObjectTrackingLeft : MonoBehaviour {
 			CvInvoke.Flip(result, result, Emgu.CV.CvEnum.FlipType.Vertical);
 		return result;
 	}
+
+	public static Texture2D ImageToTexture2D<TColor, TDepth>(Image<TColor, TDepth> image, bool correctForVerticleFlip = true)
+		where TColor : struct, IColor
+		where TDepth : new()
+	{
+		Size size = image.Size;
+
+		if (typeof(TColor) == typeof(Rgb) && typeof(TDepth) == typeof(Byte))
+		{
+			Texture2D texture = new Texture2D(size.Width, size.Height, TextureFormat.RGB24, false);
+			byte[] data = new byte[size.Width * size.Height * 3];
+			GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
+			using (Image<Rgb, byte> rgb = new Image<Rgb, byte>(size.Width, size.Height, size.Width * 3, dataHandle.AddrOfPinnedObject()))
+			{
+				rgb.ConvertFrom(image);
+				if (correctForVerticleFlip)
+					CvInvoke.Flip(rgb, rgb, Emgu.CV.CvEnum.FlipType.Vertical);
+			}
+			dataHandle.Free();
+			texture.LoadRawTextureData(data);
+			texture.Apply();
+			return texture;
+		}
+		else //if (typeof(TColor) == typeof(Rgba) && typeof(TDepth) == typeof(Byte))
+		{
+			Texture2D texture = new Texture2D(size.Width, size.Height, TextureFormat.RGBA32, false);
+			byte[] data = new byte[size.Width * size.Height * 4];
+			GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
+			using (Image<Rgba, byte> rgba = new Image<Rgba, byte>(size.Width, size.Height, size.Width * 4, dataHandle.AddrOfPinnedObject()))
+			{
+				rgba.ConvertFrom(image);
+				if (correctForVerticleFlip)
+					CvInvoke.Flip(rgba, rgba, Emgu.CV.CvEnum.FlipType.Vertical);
+			}
+			dataHandle.Free();
+			texture.LoadRawTextureData(data);
+
+			texture.Apply();
+			return texture;
+		}
+
+		//return null;
+	}
+
+
 	public void OpenConnection()
 	{
 		print("looking for port");
