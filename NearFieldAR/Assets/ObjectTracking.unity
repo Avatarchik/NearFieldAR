@@ -101,7 +101,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spName: COM2
-  deviceName: UI325xLE-C_4102832626
+  deviceName: UI325xLE-C_4102832627
 --- !u!1001 &483715036
 Prefab:
   m_ObjectHideFlags: 0
@@ -257,7 +257,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1058563113}
   m_LocalRotation: {x: -0.5, y: -0.5, z: 0.5, w: 0.5}
-  m_LocalPosition: {x: 0, y: 0.5, z: 0}
+  m_LocalPosition: {x: 0, y: -0.8, z: 0}
   m_LocalScale: {x: 4, y: 1, z: 3}
   m_Children: []
   m_Father: {fileID: 989396402}
@@ -274,7 +274,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spName: COM4
-  deviceName: UI325xLE-C_4102832627
+  deviceName: UI325xLE-C_4102832626
 --- !u!23 &1058563116
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -396,7 +396,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 148420, guid: 0875cbec0c5c815479d65275c66e5b9d, type: 2}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 11460402, guid: 0875cbec0c5c815479d65275c66e5b9d, type: 2}

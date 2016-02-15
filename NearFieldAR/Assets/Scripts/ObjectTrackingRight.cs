@@ -37,14 +37,17 @@ public class ObjectTrackingRight : MonoBehaviour {
 	MCvScalar avgPixelIntensity;
 	int diff = 0;
 
-	int H_MIN = 22;
-	int H_MAX = 65;
-	int S_MIN = 156;
+	int H_MIN = 35;
+	int H_MAX = 61;
+	int S_MIN = 113;
 	int S_MAX = 255;
-	int V_MIN = 92;
+	int V_MIN = 86;
 	int V_MAX = 255;
 	// Use this for initialization
-
+	static Texture2D textureI2TC3;
+	static byte[] dataI2TC3;
+	static Texture2D textureI2TC4;
+	static byte[] dataI2TC4;
 	void Start () {
 		sp = new SerialPort(spName, 9600, Parity.None, 8, StopBits.One);
 		OpenConnection ();
@@ -62,6 +65,10 @@ public class ObjectTrackingRight : MonoBehaviour {
 			-5.3089969982021680e-002};
 		Distortion_Coefficients = new Mat(5, 1, DepthType.Cv64F, 1);
 		Distortion_Coefficients.SetTo(distortion_Coefficients);
+		textureI2TC3 = new Texture2D(FRAME_WIDTH, FRAME_HEIGHT, TextureFormat.RGB24, false);
+		dataI2TC3 = new byte[FRAME_WIDTH * FRAME_HEIGHT * 3];
+		textureI2TC4 = new Texture2D(FRAME_WIDTH, FRAME_HEIGHT, TextureFormat.RGBA32, false);
+		dataI2TC4 = new byte[FRAME_WIDTH * FRAME_HEIGHT * 4];
 		StartCoroutine ("SendDiff");
     }
 
@@ -78,8 +85,8 @@ public class ObjectTrackingRight : MonoBehaviour {
 		RenderTexture.active = was;
 		oriImage = Texture2dToImage<Bgr, byte> (tex, true);
 
-		CvInvoke.Undistort (oriImage, resImage, Camera_Matrix, Distortion_Coefficients);
-		mr.material.mainTexture = (Texture)ImageToTexture2D(resImage, true);    
+	//	CvInvoke.Undistort (oriImage, resImage, Camera_Matrix, Distortion_Coefficients);
+	//	mr.material.mainTexture = (Texture)ImageToTexture2D(resImage, true);    
 		Image<Hsv, Byte> hsv_image = resImage.Convert<Hsv, Byte>();
 
 		// Change the HSV value here
@@ -96,17 +103,19 @@ public class ObjectTrackingRight : MonoBehaviour {
 		CvInvoke.FindNonZero (red_object, nonZeroCoordinates);
 		avgPixelIntensity = CvInvoke.Mean(nonZeroCoordinates);
 	//	Debug.Log (avgPixelIntensity.V1);
-	//	CvInvoke.Imshow("right image", resImage); //Show the image
+	//	CvInvoke.Imshow("right image", red_object); //Show the image
   //    CvInvoke.WaitKey(30);
+		//System.GC.Collect();
+		//DestroyObject (mr.material.mainTexture);
     }
 
 	IEnumerator SendDiff()
 	{
 		while (true) {
-			yield return new WaitForSeconds (0.15f);
+			yield return new WaitForSeconds (0.25f);
 			diff = 0;
 			if (nonZeroCoordinates.Rows > 1000)
-				diff = (int)(avgPixelIntensity.V1 - (double)(FRAME_HEIGHT / 2));
+				diff = -(int)(avgPixelIntensity.V1 - (double)(FRAME_HEIGHT / 2));
 //			Debug.Log (diff);
 			sp.Write (diff + "");
 		}
@@ -162,9 +171,8 @@ public class ObjectTrackingRight : MonoBehaviour {
 
 		if (typeof(TColor) == typeof(Rgb) && typeof(TDepth) == typeof(Byte))
 		{
-			Texture2D texture = new Texture2D(size.Width, size.Height, TextureFormat.RGB24, false);
-			byte[] data = new byte[size.Width * size.Height * 3];
-			GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
+			
+			GCHandle dataHandle = GCHandle.Alloc(dataI2TC3, GCHandleType.Pinned);
 			using (Image<Rgb, byte> rgb = new Image<Rgb, byte>(size.Width, size.Height, size.Width * 3, dataHandle.AddrOfPinnedObject()))
 			{
 				rgb.ConvertFrom(image);
@@ -172,15 +180,14 @@ public class ObjectTrackingRight : MonoBehaviour {
 					CvInvoke.Flip(rgb, rgb, Emgu.CV.CvEnum.FlipType.Vertical);
 			}
 			dataHandle.Free();
-			texture.LoadRawTextureData(data);
-			texture.Apply();
-			return texture;
+			textureI2TC3.LoadRawTextureData(dataI2TC3);
+			textureI2TC3.Apply();
+			return textureI2TC3;
 		}
 		else //if (typeof(TColor) == typeof(Rgba) && typeof(TDepth) == typeof(Byte))
 		{
-			Texture2D texture = new Texture2D(size.Width, size.Height, TextureFormat.RGBA32, false);
-			byte[] data = new byte[size.Width * size.Height * 4];
-			GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
+			
+			GCHandle dataHandle = GCHandle.Alloc(dataI2TC4, GCHandleType.Pinned);
 			using (Image<Rgba, byte> rgba = new Image<Rgba, byte>(size.Width, size.Height, size.Width * 4, dataHandle.AddrOfPinnedObject()))
 			{
 				rgba.ConvertFrom(image);
@@ -188,10 +195,9 @@ public class ObjectTrackingRight : MonoBehaviour {
 					CvInvoke.Flip(rgba, rgba, Emgu.CV.CvEnum.FlipType.Vertical);
 			}
 			dataHandle.Free();
-			texture.LoadRawTextureData(data);
-
-			texture.Apply();
-			return texture;
+			textureI2TC4.LoadRawTextureData(dataI2TC4);
+			textureI2TC4.Apply();
+			return textureI2TC4;
 		}
 
 		//return null;
