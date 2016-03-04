@@ -18,7 +18,7 @@ using System.Runtime.InteropServices;
 public class ObjectTrackingRight : MonoBehaviour {
 	public string spName = "COM4";
 	private static SerialPort sp;
-	public string deviceName = "UI325xLE-C_4102832627";
+	public string deviceName = "UI325xLE-C_4102832626";
 	AVProLiveCameraDevice device;
 	MeshRenderer mr;
 	Image<Bgr, Byte> oriImage;
@@ -36,21 +36,42 @@ public class ObjectTrackingRight : MonoBehaviour {
 	Mat Distortion_Coefficients;
 	MCvScalar avgPixelIntensity;
 	int diff = 0;
+	/*
+	 * 5
+	 * 215
+	 * 171
+	 * 307
+	 * 139
+	 * 282
+	 * 
+	 * 
+	 */
 
-	int H_MIN = 35;
-	int H_MAX = 61;
-	int S_MIN = 113;
-	int S_MAX = 255;
-	int V_MIN = 86;
-	int V_MAX = 255;
+
+	public int H_MIN = 0;
+	public int H_MAX = 44;
+	public int S_MIN = 233;
+	public int S_MAX = 262;
+	public int V_MIN = 139;
+	public int V_MAX = 282;
+
+	/*
+	public int H_MIN = 38;
+	public int H_MAX = 88;
+	public int S_MIN = 152;
+	public int S_MAX = 252;
+	public int V_MIN = 113;
+	public int V_MAX = 255;
+	*/
+
 	// Use this for initialization
 	static Texture2D textureI2TC3;
 	static byte[] dataI2TC3;
 	static Texture2D textureI2TC4;
 	static byte[] dataI2TC4;
 	void Start () {
-		sp = new SerialPort(spName, 9600, Parity.None, 8, StopBits.One);
-		OpenConnection ();
+		//sp = new SerialPort(spName, 9600, Parity.None, 8, StopBits.One);
+		//OpenConnection ();
 		AVProLiveCameraManager.Instance.GetDevice(deviceName).Start(-1);    
 		resImage = new Image<Bgr, Byte> (FRAME_WIDTH, FRAME_HEIGHT);
 		mr = GetComponent<MeshRenderer> ();
@@ -69,7 +90,7 @@ public class ObjectTrackingRight : MonoBehaviour {
 		dataI2TC3 = new byte[FRAME_WIDTH * FRAME_HEIGHT * 3];
 		textureI2TC4 = new Texture2D(FRAME_WIDTH, FRAME_HEIGHT, TextureFormat.RGBA32, false);
 		dataI2TC4 = new byte[FRAME_WIDTH * FRAME_HEIGHT * 4];
-		StartCoroutine ("SendDiff");
+		//StartCoroutine ("SendDiff");
     }
 
 	private void UpdateCameras()
@@ -85,9 +106,9 @@ public class ObjectTrackingRight : MonoBehaviour {
 		RenderTexture.active = was;
 		oriImage = Texture2dToImage<Bgr, byte> (tex, true);
 
-	//	CvInvoke.Undistort (oriImage, resImage, Camera_Matrix, Distortion_Coefficients);
+		CvInvoke.Undistort (oriImage, resImage, Camera_Matrix, Distortion_Coefficients);
 	//	mr.material.mainTexture = (Texture)ImageToTexture2D(resImage, true);    
-		Image<Hsv, Byte> hsv_image = resImage.Convert<Hsv, Byte>();
+		Image<Hsv, Byte> hsv_image = oriImage.Convert<Hsv, Byte>();
 
 		// Change the HSV value here
 		Hsv hsvmin = new Hsv(H_MIN, S_MIN, V_MIN);
@@ -103,13 +124,18 @@ public class ObjectTrackingRight : MonoBehaviour {
 		CvInvoke.FindNonZero (red_object, nonZeroCoordinates);
 		avgPixelIntensity = CvInvoke.Mean(nonZeroCoordinates);
 	//	Debug.Log (avgPixelIntensity.V1);
-	//	CvInvoke.Imshow("right image", red_object); //Show the image
+		CvInvoke.Imshow("right image", red_object); //Show the image
   //    CvInvoke.WaitKey(30);
 		//System.GC.Collect();
 		//DestroyObject (mr.material.mainTexture);
+		diff = 0;
+		if (nonZeroCoordinates.Rows > 1000) {
+			diff = -(int)(avgPixelIntensity.V1 - (double)(FRAME_HEIGHT / 2));
+			ArduinoSerialHandler.diff_right = diff;
+		}
     }
 
-	IEnumerator SendDiff()
+	/*IEnumerator SendDiff()
 	{
 		while (true) {
 			yield return new WaitForSeconds (0.25f);
@@ -119,7 +145,7 @@ public class ObjectTrackingRight : MonoBehaviour {
 //			Debug.Log (diff);
 			sp.Write (diff + "");
 		}
-	}
+	}*/
 		
 	private int _lastFrameCount;
 	void OnRenderObject()
@@ -206,7 +232,7 @@ public class ObjectTrackingRight : MonoBehaviour {
 
 
 
-    public void OpenConnection()
+    /*public void OpenConnection()
 	{
         print("looking for port");
 		if (sp != null) {
@@ -228,12 +254,12 @@ public class ObjectTrackingRight : MonoBehaviour {
 				print("Port == null");
 			}
 		}
-	}
+	}*/
 
 	void OnApplicationQuit() 
 	{
 		AVProLiveCameraManager.Instance.GetDevice (deviceName).Close ();
 		device.Close ();
-		sp.Close();
+		//sp.Close();
 	}
 }

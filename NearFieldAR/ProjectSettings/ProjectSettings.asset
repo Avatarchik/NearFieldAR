@@ -170,8 +170,8 @@ PlayerSettings:
     m_Icons:
     - serializedVersion: 2
       m_Icon: {fileID: 0}
-      m_Width: 128
-      m_Height: 128
+      m_Width: 32890624
+      m_Height: 32890624
   m_BuildTargetBatching:
   - m_BuildTarget: Web
     m_StaticBatching: 0

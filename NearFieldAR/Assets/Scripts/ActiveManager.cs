@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class ActiveManager : MonoBehaviour {
 	private float angle;
-	private float speed = 0.5f;
+	private float speed = 0.2f;
 	public Transform TranslateLeft;
 	public Transform TranslateRight;
 	public Transform ScaleLeft;

@@ -51,7 +51,7 @@ void Rotate(float diff) {
    else
     steps = 0;
   // Makes 200 pulses for making one full cycle rotation
-   delayTime = 140000 / abs(steps);
+   delayTime = 120000 / abs(steps);
    for(int i = 0; i < steps; i++) {
       digitalWrite(stepPin,HIGH); 
       delayMicroseconds(delayTime); 
