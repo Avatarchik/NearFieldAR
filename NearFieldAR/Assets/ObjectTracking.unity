@@ -307,7 +307,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1058563113}
   m_LocalRotation: {x: -0.5, y: -0.5, z: 0.5, w: 0.5}
-  m_LocalPosition: {x: 0, y: -0.67, z: 0}
+  m_LocalPosition: {x: 0, y: -1.5, z: 0}
   m_LocalScale: {x: 4, y: 1, z: 3}
   m_Children: []
   m_Father: {fileID: 989396402}
@@ -323,10 +323,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a363e2134593cca46bb22f47a92bb399, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spName: COM4
+  spName: COM9
   deviceName: UI325xLE-C_4102832626
-  H_MIN: 0
-  H_MAX: 44
+  H_MIN: 13
+  H_MAX: 83
   S_MIN: 233
   S_MAX: 262
   V_MIN: 139
@@ -407,46 +407,6 @@ Transform:
   - {fileID: 989396402}
   m_Father: {fileID: 2021848462}
   m_RootOrder: 0
---- !u!1 &1354564455
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 1354564456}
-  - 114: {fileID: 1354564457}
-  m_Layer: 0
-  m_Name: ArduinoSerialHandler
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1354564456
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1354564455}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.00000023841858, y: 1.8894181, z: -12.6}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 8
---- !u!114 &1354564457
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1354564455}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 70cfc7cd8cd5fea4a838cd24c686bffd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spName: COM4
 --- !u!1 &1678622883
 GameObject:
   m_ObjectHideFlags: 0
@@ -664,7 +624,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 148420, guid: 0875cbec0c5c815479d65275c66e5b9d, type: 2}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 11460402, guid: 0875cbec0c5c815479d65275c66e5b9d, type: 2}

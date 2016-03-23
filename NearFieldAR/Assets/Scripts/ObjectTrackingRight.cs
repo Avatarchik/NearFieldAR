@@ -16,7 +16,7 @@ using System.Runtime.InteropServices;
 
 
 public class ObjectTrackingRight : MonoBehaviour {
-	public string spName = "COM4";
+	public string spName = "COM9";
 	private static SerialPort sp;
 	public string deviceName = "UI325xLE-C_4102832626";
 	AVProLiveCameraDevice device;
@@ -30,7 +30,7 @@ public class ObjectTrackingRight : MonoBehaviour {
 
 	const int FRAME_WIDTH = 1024;
 	const int FRAME_HEIGHT = 768;
-	int servoPosition = 90;
+	//int servoPosition = 90;
 	Mat nonZeroCoordinates;
 	Mat Camera_Matrix;
 	Mat Distortion_Coefficients;
@@ -48,8 +48,8 @@ public class ObjectTrackingRight : MonoBehaviour {
 	 */
 
 
-	public int H_MIN = 0;
-	public int H_MAX = 44;
+	public int H_MIN = 13;
+	public int H_MAX = 83;
 	public int S_MIN = 233;
 	public int S_MAX = 262;
 	public int V_MIN = 139;
@@ -69,9 +69,12 @@ public class ObjectTrackingRight : MonoBehaviour {
 	static byte[] dataI2TC3;
 	static Texture2D textureI2TC4;
 	static byte[] dataI2TC4;
+
+	//ArduinoSerialHandlerRight arduino_serial_right = new ArduinoSerialHandlerRight ();
+
 	void Start () {
-		//sp = new SerialPort(spName, 9600, Parity.None, 8, StopBits.One);
-		//OpenConnection ();
+		sp = new SerialPort(spName, 9600, Parity.None, 8, StopBits.One);
+		OpenConnection ();
 		AVProLiveCameraManager.Instance.GetDevice(deviceName).Start(-1);    
 		resImage = new Image<Bgr, Byte> (FRAME_WIDTH, FRAME_HEIGHT);
 		mr = GetComponent<MeshRenderer> ();
@@ -90,7 +93,9 @@ public class ObjectTrackingRight : MonoBehaviour {
 		dataI2TC3 = new byte[FRAME_WIDTH * FRAME_HEIGHT * 3];
 		textureI2TC4 = new Texture2D(FRAME_WIDTH, FRAME_HEIGHT, TextureFormat.RGBA32, false);
 		dataI2TC4 = new byte[FRAME_WIDTH * FRAME_HEIGHT * 4];
-		//StartCoroutine ("SendDiff");
+		StartCoroutine ("SendDiff");
+
+		//arduino_serial_right = new ArduinoSerialHandlerRight ();
     }
 
 	private void UpdateCameras()
@@ -125,27 +130,25 @@ public class ObjectTrackingRight : MonoBehaviour {
 		avgPixelIntensity = CvInvoke.Mean(nonZeroCoordinates);
 	//	Debug.Log (avgPixelIntensity.V1);
 		CvInvoke.Imshow("right image", red_object); //Show the image
-  //    CvInvoke.WaitKey(30);
-		//System.GC.Collect();
-		//DestroyObject (mr.material.mainTexture);
+
 		diff = 0;
 		if (nonZeroCoordinates.Rows > 1000) {
 			diff = -(int)(avgPixelIntensity.V1 - (double)(FRAME_HEIGHT / 2));
-			ArduinoSerialHandler.diff_right = diff;
+			//ArduinoSerialHandlerRight.value1 = diff;
 		}
     }
 
-	/*IEnumerator SendDiff()
+	IEnumerator SendDiff()
 	{
 		while (true) {
 			yield return new WaitForSeconds (0.25f);
 			diff = 0;
 			if (nonZeroCoordinates.Rows > 1000)
 				diff = -(int)(avgPixelIntensity.V1 - (double)(FRAME_HEIGHT / 2));
-//			Debug.Log (diff);
-			sp.Write (diff + "");
+			Debug.Log (diff);
+			sp.Write (diff.ToString());
 		}
-	}*/
+	}
 		
 	private int _lastFrameCount;
 	void OnRenderObject()
@@ -232,7 +235,7 @@ public class ObjectTrackingRight : MonoBehaviour {
 
 
 
-    /*public void OpenConnection()
+    public void OpenConnection()
 	{
         print("looking for port");
 		if (sp != null) {
@@ -254,12 +257,28 @@ public class ObjectTrackingRight : MonoBehaviour {
 				print("Port == null");
 			}
 		}
-	}*/
+	}
+
 
 	void OnApplicationQuit() 
 	{
+		/*if (arduino_serial_right == null)
+			Debug.Log ("NULL");
+
+		arduino_serial_right.die = true;
+		Debug.Log ("Arduino Close");
+		arduino_serial_right.close ();
+*/
+
+
+
+		Debug.Log ("Camera close");
 		AVProLiveCameraManager.Instance.GetDevice (deviceName).Close ();
 		device.Close ();
-		//sp.Close();
+
+
+
+		Debug.Log ("Done closing");
+		sp.Close();
 	}
 }

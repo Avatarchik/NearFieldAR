@@ -37,20 +37,24 @@ public class ObjectTrackingLeft : MonoBehaviour {
 	MCvScalar avgPixelIntensity;
 	int diff = 0;
 
-	 int H_MIN = 0;
-	 int H_MAX = 50;
-	 int S_MIN = 219;
-	 int S_MAX = 255;
-	 int V_MIN = 198;	
-	 int V_MAX = 255;
+	int H_MIN = 13;
+	int H_MAX = 83;
+	int S_MIN = 233;
+	int S_MAX = 262;
+	int V_MIN = 139;
+	int V_MAX = 282;
 	// Use this for initialization
 	static Texture2D textureI2TC3;
 	static byte[] dataI2TC3;
 	static Texture2D textureI2TC4;
 	static byte[] dataI2TC4;
+
+	//ArduinoSerialHandlerLeft arduino_serial_left;
+
+
 	void Start () {
-		//sp = new SerialPort(spName, 9600, Parity.None, 8, StopBits.One);
-		//OpenConnection ();
+		sp = new SerialPort(spName, 9600, Parity.None, 8, StopBits.One);
+		OpenConnection ();
 		AVProLiveCameraManager.Instance.GetDevice(deviceName).Start(-1);    
 		resImage = new Image<Bgr, Byte> (FRAME_WIDTH, FRAME_HEIGHT);
 		mr = GetComponent<MeshRenderer> ();
@@ -69,7 +73,9 @@ public class ObjectTrackingLeft : MonoBehaviour {
 		dataI2TC3 = new byte[FRAME_WIDTH * FRAME_HEIGHT * 3];
 		textureI2TC4 = new Texture2D(FRAME_WIDTH, FRAME_HEIGHT, TextureFormat.RGBA32, false);
 		dataI2TC4 = new byte[FRAME_WIDTH * FRAME_HEIGHT * 4];
-		//StartCoroutine ("SendDiff");
+		StartCoroutine ("SendDiff");
+
+		//arduino_serial_left = new ArduinoSerialHandlerLeft ();
 	}
 
 	private void UpdateCameras()
@@ -110,7 +116,7 @@ public class ObjectTrackingLeft : MonoBehaviour {
 		diff = 0;
 		if (nonZeroCoordinates.Rows > 1000) {
 			diff = (int)(avgPixelIntensity.V1 - (double)(FRAME_HEIGHT / 2));
-			ArduinoSerialHandler.diff_left = diff;
+			//ArduinoSerialHandlerLeft.value0 = diff;
 		}
 	
 	}
@@ -210,7 +216,7 @@ public class ObjectTrackingLeft : MonoBehaviour {
 	}
 
 
-	/*public void OpenConnection()
+	public void OpenConnection()
 	{
 		print("looking for port");
 		if (sp != null) {
@@ -232,11 +238,12 @@ public class ObjectTrackingLeft : MonoBehaviour {
 				print("Port == null");
 			}
 		}
-	}*/
+	}
 	void OnApplicationQuit() 
 	{
 		AVProLiveCameraManager.Instance.GetDevice (deviceName).Close ();
 		device.Close ();
+		//arduino_serial_left.close (); 	
 		//sp.Close();
 	}
 
