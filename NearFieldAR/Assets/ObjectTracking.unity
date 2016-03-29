@@ -100,8 +100,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 956af99898b2d584dad48da9b133296e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spName: COM4
+  spName: COM9
   deviceName: UI325xLE-C_4102832627
+  delayTime: 0.25
+  offset: 0.17
 --- !u!1 &457202753
 GameObject:
   m_ObjectHideFlags: 0
@@ -307,7 +309,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1058563113}
   m_LocalRotation: {x: -0.5, y: -0.5, z: 0.5, w: 0.5}
-  m_LocalPosition: {x: 0, y: -1.5, z: 0}
+  m_LocalPosition: {x: 0, y: -1.68, z: 0}
   m_LocalScale: {x: 4, y: 1, z: 3}
   m_Children: []
   m_Father: {fileID: 989396402}
@@ -323,8 +325,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a363e2134593cca46bb22f47a92bb399, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spName: COM9
+  spName: COM1
   deviceName: UI325xLE-C_4102832626
+  delayTime: 0.43
+  offset: 0.17
   H_MIN: 13
   H_MAX: 83
   S_MIN: 233
@@ -624,7 +628,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 148420, guid: 0875cbec0c5c815479d65275c66e5b9d, type: 2}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 11460402, guid: 0875cbec0c5c815479d65275c66e5b9d, type: 2}
