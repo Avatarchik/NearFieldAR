@@ -144,9 +144,9 @@ public class ObjectTrackingRight : MonoBehaviour {
 			yield return new WaitForSeconds (0.25f);
 			diff = 0;
 			if (nonZeroCoordinates.Rows > 1000)
-				diff = -(int)(avgPixelIntensity.V1 - (double)(FRAME_HEIGHT / 2));
-			Debug.Log (diff);
-			sp.Write (diff.ToString());
+				diff = (int)(avgPixelIntensity.V1 - (double)(FRAME_HEIGHT / 2));
+		//	Debug.Log (diff);
+			sp.Write (diff + "");
 		}
 	}
 		
@@ -275,9 +275,6 @@ public class ObjectTrackingRight : MonoBehaviour {
 		Debug.Log ("Camera close");
 		AVProLiveCameraManager.Instance.GetDevice (deviceName).Close ();
 		device.Close ();
-
-
-
 		Debug.Log ("Done closing");
 		sp.Close();
 	}

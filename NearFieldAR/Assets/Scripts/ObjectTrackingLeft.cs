@@ -120,7 +120,7 @@ public class ObjectTrackingLeft : MonoBehaviour {
 		}
 	
 	}
-	/*IEnumerator SendDiff()
+	IEnumerator SendDiff()
 	{
 		while (true) {
 			yield return new WaitForSeconds (0.25f);
@@ -130,7 +130,7 @@ public class ObjectTrackingLeft : MonoBehaviour {
 //			Debug.Log (diff);
 			sp.Write (diff + "");
 		}
-	}*/
+	}
 
 	private int _lastFrameCount;
 	void OnRenderObject()
@@ -244,7 +244,7 @@ public class ObjectTrackingLeft : MonoBehaviour {
 		AVProLiveCameraManager.Instance.GetDevice (deviceName).Close ();
 		device.Close ();
 		//arduino_serial_left.close (); 	
-		//sp.Close();
+		sp.Close();
 	}
 
 }

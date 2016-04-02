@@ -14,87 +14,60 @@
 
 // twelve servo objects can be created on most boards
 
-int pos = 90;
+int pos = 60;
 int diff = 0;
-int left = 0;
-int right = 0;
 int rotateDegree;
-int delayTime = 0;
+int delayTime;
 const float FRAME_WIDTH = 1024.0f;
 const float FRAME_HEIGHT = 768.0f;
 int ID = 1;
 void setup() {
-  //myservo995.attach(9);  // attaches the servo on pin 9 to the servo object
   Serial.begin(9600); // // opens serial port, sets data rate to 9600 bps
-  Serial.setTimeout(50);  
-//  myservo.attach(9);
-//  myservo.write(90);  
-  //myservo.attach(10);
-  //myservo.write(90);
-
+  Serial.setTimeout(10);  
   Dynamixel.begin(1000000,2);  // Inicialize the servo at 1Mbps and Pin Control 2
   delay(1000);
   Dynamixel.ledStatus(ID,ON);
-
-  Dynamixel.move(ID, degrees_to_value(0));
+  Dynamixel.move(ID, degrees_to_value(pos));
 }
 
 
 int degrees_to_value(int value)
 {
-  return map(value, -300, 300, 0, 1023);
+  return map(value, 0, 300, 0, 1023);
 }
 
-void move_degrees(int degree)
+void move_degrees(int degree, int _speed)
 {
-  Dynamixel.move(ID, degrees_to_value(degree));
+  //Dynamixel.move(ID, degrees_to_value(0));
+  Dynamixel.moveSpeed(ID, degrees_to_value(degree), _speed);
 }
 
 
 void move_motor(int value)
 {
-
     rotateDegree = value * 77.0f / FRAME_HEIGHT; 
-    delayTime = 150 / abs(rotateDegree);
-//    Serial.println(delayTime);
-    delayTime = constrain(delayTime, 4, 100);
-
-
-      if(rotateDegree > 0){
-        for (int i = pos; i <= (pos + rotateDegree); i += 1) { // goes from 0 degrees to 180 degrees
-            move_degrees(i);
-            delay(delayTime/2);                       // waits 15ms for the servo to reach the position
-        }
-        pos += rotateDegree;
-        if(pos > 180)  pos = 180;
-      }else{
-        for (int i = pos; i >= (pos + rotateDegree); i -= 1) { // goes from 0 degrees to 180 degrees
-            move_degrees(i);
-            delay(delayTime/2);                       // waits 15ms for the servo to reach the position
-        }
-        pos += rotateDegree;
-        if(pos < 0)  pos = 0;   
-      }
-
-
+  //  delayTime = 200 / abs(rotateDegree);
+   // delayTime = constrain(delayTime, 4, 150);
+    
+    int _speed = map(abs(rotateDegree), 0, 39, 0, 1023);
+    pos += rotateDegree;
+    move_degrees(pos, _speed);
+    if(pos > 300)  pos = 300;
+    else if(pos < 0) pos = 0;
+  //  int rpm = map(_speed, 0, 1023, 0, 111);
+    //float delayTime = 60.0f / (rpm * 360.0f) * abs(rotateDegree) * 1000;
+    /// 111rpm   60 / (rpm * 360)
+   // Serial.println(rpm);
+  //  delay((int)(delayTime) + 5);
 }
 
 
 void loop() {
   if (Serial.available() > 0) {
     int value = 0;
-
-    /*String left  = Serial.readStringUntil(';');
-    Serial.read();
-    String right  = Serial.readStringUntil('\0');
-
-    diff = right.toInt();
- */
     String entire_string = Serial.readStringUntil('\n');
     value = entire_string.toInt();
-    Serial.println(value);
     move_motor(value);
-    //diff = Serial.parseInt();  
-    //delay(20);
+   
   }
 }
